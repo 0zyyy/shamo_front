@@ -89,7 +89,9 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                         style: secondaryTextStyle,
                       ),
                       Container(
-                          margin: EdgeInsets.only(top: 20),
+                          margin: EdgeInsets.only(
+                            top: 20,
+                          ),
                           width: 154,
                           height: 54,
                           child: TextButton(
@@ -151,6 +153,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               onPageChanged: (index, reason) {
                 setState(() {
                   currentIndex = index;
+                  print(currentIndex);
                 });
               },
             )),
@@ -161,6 +164,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: images.map((e) {
               index++;
+              print(index);
+
               return indicator(index);
             }).toList()),
       ],
@@ -170,7 +175,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   Widget bottomBar() {
     return Container(
       margin: EdgeInsets.only(
-          top: defaultMargin, left: defaultMargin, right: defaultMargin),
+          top: defaultMargin,
+          left: defaultMargin,
+          right: defaultMargin,
+          bottom: defaultMargin),
       child: Row(
         children: [
           Container(
@@ -211,146 +219,153 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
 
   Widget content() {
     int index = -1;
-    return Container(
-      margin: EdgeInsets.only(top: 17),
-      width: double.infinity,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-        color: backgroundColor1,
-      ),
-      child: Column(
-        children: [
-          // Note: nama dan kategori sepatu
-          Container(
-            margin: EdgeInsets.only(
-                top: defaultMargin, left: defaultMargin, right: defaultMargin),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'TERREX JUMBALANG',
+    return Expanded(
+      child: Container(
+        margin: EdgeInsets.only(top: 17),
+        width: double.infinity,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          color: backgroundColor1,
+        ),
+        child: Column(
+          children: [
+            // Note: nama dan kategori sepatu
+            Container(
+              margin: EdgeInsets.only(
+                  top: defaultMargin,
+                  left: defaultMargin,
+                  right: defaultMargin),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'TERREX JUMBALANG',
+                          style: primaryTextStyle.copyWith(
+                              fontSize: 18, fontWeight: semiBold),
+                        ),
+                        Text(
+                          'Hiking',
+                          style: subtitleTextStyle.copyWith(fontSize: 12),
+                        )
+                      ],
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        isWishList = !isWishList;
+                      });
+                      if (isWishList) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: secondaryColor,
+                            content: Text(
+                              'Added to your wishlist',
+                              textAlign: TextAlign.center,
+                            )));
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: alertColor,
+                            content: Text(
+                              'Removed from your wishlist',
+                              textAlign: TextAlign.center,
+                            )));
+                      }
+                    },
+                    child: Image.asset(
+                      isWishList
+                          ? 'assets/images/button_wishlist_blue.png'
+                          : 'assets/images/button_wishlist.png',
+                      width: 46,
+                    ),
+                  )
+                ],
+              ),
+            ),
+            // Note: price start from
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(16),
+              margin: EdgeInsets.only(
+                  top: 20, left: defaultMargin, right: defaultMargin),
+              decoration: BoxDecoration(color: backgroundColor2),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Price Start from',
+                    style: primaryTextStyle,
+                  ),
+                  Text(
+                    'Harga',
+                    style: priceTextStyle.copyWith(
+                        fontSize: 15, fontWeight: semiBold),
+                  )
+                ],
+              ),
+            ),
+            // Note : description
+            Container(
+              width: double.infinity,
+              margin: EdgeInsets.only(
+                  top: defaultMargin,
+                  left: defaultMargin,
+                  right: defaultMargin),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Description',
+                    style: primaryTextStyle.copyWith(
+                        fontSize: 16, fontWeight: semiBold),
+                  ),
+                  SizedBox(
+                    height: 12,
+                  ),
+                  Text(
+                    'JEMBALNG JEMBALNG JEMBALNG JEMBALNG JEMBALNG JEMBALNG JEMBALNG JEMBALNG JEMBALNG JEMBALNG JEMBALNG JEMBALNG',
+                    style: subtitleTextStyle.copyWith(fontWeight: light),
+                  )
+                ],
+              ),
+            ),
+            //Note: familiar shoes
+            Container(
+              width: double.infinity,
+              margin: EdgeInsets.only(top: defaultMargin),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: defaultMargin),
+                      child: Text(
+                        'Familiar Shoes',
                         style: primaryTextStyle.copyWith(
-                            fontSize: 18, fontWeight: semiBold),
+                            fontSize: 14, fontWeight: medium),
                       ),
-                      Text(
-                        'Hiking',
-                        style: subtitleTextStyle.copyWith(fontSize: 12),
-                      )
-                    ],
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      isWishList = !isWishList;
-                    });
-                    if (isWishList) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          backgroundColor: secondaryColor,
-                          content: Text(
-                            'Added to your wishlist',
-                            textAlign: TextAlign.center,
-                          )));
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          backgroundColor: alertColor,
-                          content: Text(
-                            'Removed from your wishlist',
-                            textAlign: TextAlign.center,
-                          )));
-                    }
-                  },
-                  child: Image.asset(
-                    isWishList
-                        ? 'assets/images/button_wishlist_blue.png'
-                        : 'assets/images/button_wishlist.png',
-                    width: 46,
-                  ),
-                )
-              ],
+                    ),
+                    SizedBox(
+                      height: 12,
+                    ),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: familiarShoes.map((image) {
+                          index++;
+                          return Container(
+                              margin: EdgeInsets.only(
+                                  left: index == 0 ? defaultMargin : 0),
+                              child: familiarShoesCard(image));
+                        }).toList(),
+                      ),
+                    )
+                  ]),
             ),
-          ),
-          // Note: price start from
-          Container(
-            width: double.infinity,
-            padding: EdgeInsets.all(16),
-            margin: EdgeInsets.only(
-                top: 20, left: defaultMargin, right: defaultMargin),
-            decoration: BoxDecoration(color: backgroundColor2),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Price Start from',
-                  style: primaryTextStyle,
-                ),
-                Text(
-                  'Harga',
-                  style: priceTextStyle.copyWith(
-                      fontSize: 15, fontWeight: semiBold),
-                )
-              ],
-            ),
-          ),
-          // Note : description
-          Container(
-            width: double.infinity,
-            margin: EdgeInsets.only(
-                top: defaultMargin, left: defaultMargin, right: defaultMargin),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Description',
-                  style: primaryTextStyle.copyWith(
-                      fontSize: 16, fontWeight: semiBold),
-                ),
-                SizedBox(
-                  height: 12,
-                ),
-                Text(
-                  'JEMBALNG JEMBALNG JEMBALNG JEMBALNG JEMBALNG JEMBALNG JEMBALNG JEMBALNG JEMBALNG JEMBALNG JEMBALNG JEMBALNG',
-                  style: subtitleTextStyle.copyWith(fontWeight: light),
-                )
-              ],
-            ),
-          ),
-          //Note: familiar shoes
-          Container(
-            width: double.infinity,
-            margin: EdgeInsets.only(top: defaultMargin),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: defaultMargin),
-                child: Text(
-                  'Familiar Shoes',
-                  style: primaryTextStyle.copyWith(
-                      fontSize: 14, fontWeight: medium),
-                ),
-              ),
-              SizedBox(
-                height: 12,
-              ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: familiarShoes.map((image) {
-                    index++;
-                    return Container(
-                        margin: EdgeInsets.only(
-                            left: index == 0 ? defaultMargin : 0),
-                        child: familiarShoesCard(image));
-                  }).toList(),
-                ),
-              )
-            ]),
-          ),
-          bottomBar()
-        ],
+            bottomBar()
+          ],
+        ),
       ),
     );
   }
