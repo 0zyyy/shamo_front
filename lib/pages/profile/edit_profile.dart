@@ -3,10 +3,14 @@ import 'package:shamo_front/pages/theme.dart';
 
 class EditProfilePage extends StatelessWidget {
   const EditProfilePage({Key? key}) : super(key: key);
-  Widget header() {
+  Widget header(BuildContext context) {
     return AppBar(
       backgroundColor: backgroundColor1,
-      leading: IconButton(onPressed: () {}, icon: Icon(Icons.close)),
+      leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.close)),
       actions: [
         IconButton(
           onPressed: () {},
@@ -73,6 +77,6 @@ class EditProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: backgroundColor3,
-        body: Column(children: [header(), content()]));
+        body: Column(children: [header(context), content()]));
   }
 }

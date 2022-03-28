@@ -17,7 +17,9 @@ class _MainPageState extends State<MainPage> {
   int currentIndex = 0;
   Widget _CartButton() {
     return FloatingActionButton(
-      onPressed: () {},
+      onPressed: () {
+        Navigator.pushNamed(context, '/cart');
+      },
       backgroundColor: AppColor.secondaryColor,
       child: Image.asset(
         'assets/images/icon_cart.png',
@@ -52,6 +54,7 @@ class _MainPageState extends State<MainPage> {
     return ClipRRect(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       child: BottomAppBar(
+        color: AppColor.bgNavBar,
         shape: CircularNotchedRectangle(),
         notchMargin: 12,
         clipBehavior: Clip.antiAlias,
@@ -125,8 +128,8 @@ class _MainPageState extends State<MainPage> {
       backgroundColor: AppColor.bgColor1,
       floatingActionButton: _CartButton(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      body: body(),
       bottomNavigationBar: _CustomBottomNav(),
+      body: Center(child: body()),
     );
   }
 }

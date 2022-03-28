@@ -117,8 +117,10 @@ class CartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [header(), emptyPage()],
+    return Material(
+      child: Column(
+        children: [header(), emptyPage()],
+      ),
     );
   }
 }
