@@ -1,14 +1,55 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shamo_front/pages/theme.dart';
+import 'package:shamo_front/provider/auth_provider.dart';
 import 'package:shamo_front/utils/big_text.dart';
 import 'package:shamo_front/utils/colors.dart';
 import 'package:shamo_front/utils/form_data.dart';
 import 'package:shamo_front/utils/small_text.dart';
+import 'package:shamo_front/widgets/loading_button.dart';
 
-class RegisterPage extends StatelessWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+class RegisterPage extends StatefulWidget {
+  RegisterPage({Key? key}) : super(key: key);
+
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    handleSignUp() async {
+      setState(() {
+        isLoading = true;
+      });
+      if (await authProvider.register(
+        name: nameController.text,
+        email: emailController.text,
+        username: usernameController.text,
+        password: passwordController.text,
+      )) {
+        Navigator.pushNamed(context, '/home');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            backgroundColor: alertColor,
+            content: Text(
+              'Gagal registrasi',
+              textAlign: TextAlign.center,
+            )));
+      }
+      setState(() {
+        isLoading = false;
+      });
+    }
+
     return Scaffold(
       backgroundColor: AppColor.bgColor1,
       body: Container(
@@ -24,62 +65,78 @@ class RegisterPage extends StatelessWidget {
               fontSize: 14,
             ),
             const SizedBox(height: 40),
-            const BigText(
-              text: 'Full Name',
-              fontSize: 16,
+            Text(
+              'Full Name',
+              style:
+                  primaryTextStyle.copyWith(fontSize: 16, fontWeight: semiBold),
             ),
             const SizedBox(
               height: 10,
             ),
-            const FormWidget(
+            FormWidget(
               text: 'Your Full Name',
               image: 'assets/images/icon_name.png',
+              controller: nameController,
             ),
             const SizedBox(height: 15),
-            const BigText(
-              text: 'Username',
-              fontSize: 16,
+            Text(
+              'Username',
+              style:
+                  primaryTextStyle.copyWith(fontSize: 16, fontWeight: semiBold),
             ),
             const SizedBox(height: 10),
-            const FormWidget(
+            FormWidget(
               text: 'Your Username',
               image: 'assets/images/icon_username.png',
+              controller: usernameController,
             ),
             const SizedBox(height: 15),
-            const BigText(
-              text: 'Email Address',
-              fontSize: 16,
+            Text(
+              'Email Address',
+              style:
+                  primaryTextStyle.copyWith(fontSize: 16, fontWeight: semiBold),
             ),
             const SizedBox(height: 10),
-            const FormWidget(
+            FormWidget(
               text: 'Your Email Address',
               image: 'assets/images/icon_email.png',
+              controller: emailController,
             ),
             const SizedBox(height: 15),
-            const BigText(
-              text: 'Password',
-              fontSize: 16,
+            Text(
+              'Password',
+              style:
+                  primaryTextStyle.copyWith(fontSize: 16, fontWeight: semiBold),
             ),
             const SizedBox(height: 10),
-            const FormWidget(
+            FormWidget(
               text: 'Your Password',
               image: 'assets/images/icon_password.png',
+              controller: passwordController,
+              obsecureText: true,
             ),
-            const SizedBox(height: 25),
-            Container(
-              height: 60,
-              width: double.maxFinite,
-              decoration: BoxDecoration(
-                color: AppColor.primaryColor,
-                borderRadius: BorderRadius.circular(100),
-              ),
-              child: Center(
-                child: SmallText(
-                  text: 'Register',
-                  textColor: AppColor.primaryTextColor,
-                ),
-              ),
-            )
+            const SizedBox(height: 15),
+            isLoading
+                ? LoadingButton()
+                : Container(
+                    height: 50,
+                    width: double.infinity,
+                    margin: EdgeInsets.only(top: 30),
+                    child: TextButton(
+                      onPressed: handleSignUp,
+                      style: TextButton.styleFrom(
+                          backgroundColor: primaryColor,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12))),
+                      child: Text(
+                        'Sign Up',
+                        style: primaryTextStyle.copyWith(
+                          fontSize: 16,
+                          fontWeight: medium,
+                        ),
+                      ),
+                    ),
+                  )
           ],
         ),
       ),
@@ -93,7 +150,7 @@ class RegisterPage extends StatelessWidget {
               const SizedBox(width: 5),
               GestureDetector(
                 onTap: () {
-                  Navigator.pushNamed(context, '/home');
+                  Navigator.pop(context);
                 },
                 child: const SmallText(
                   text: 'Login',
