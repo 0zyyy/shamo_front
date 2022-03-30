@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:provider/provider.dart';
+import 'package:shamo_front/models/product_model.dart';
 import 'package:shamo_front/pages/theme.dart';
+import 'package:shamo_front/provider/cart_provider.dart';
+import 'package:shamo_front/provider/wishlist_provider.dart';
 import 'package:shamo_front/utils/dimensions.dart';
 
 class PopularProductPage extends StatefulWidget {
-  const PopularProductPage({Key? key}) : super(key: key);
+  final Product product;
+  const PopularProductPage({Key? key, required this.product}) : super(key: key);
 
   @override
   State<PopularProductPage> createState() => _PopularProductPageState();
@@ -12,26 +17,21 @@ class PopularProductPage extends StatefulWidget {
 
 class _PopularProductPageState extends State<PopularProductPage> {
   int currentIndex = 0;
-  bool isWishList = false;
-  List images = [
-    'assets/images/image_shoes.png',
-    'assets/images/image_shoes.png',
-    'assets/images/image_shoes.png',
-  ];
   List familiarShoes = [
     'assets/images/image_shoes.png',
-    'assets/images/image_shoes.png',
-    'assets/images/image_shoes.png',
-    'assets/images/image_shoes.png',
-    'assets/images/image_shoes.png',
-    'assets/images/image_shoes.png',
-    'assets/images/image_shoes.png',
-    'assets/images/image_shoes.png',
-    'assets/images/image_shoes.png',
+    'assets/images/image_shoes2.png',
+    'assets/images/image_shoes3.png',
+    'assets/images/image_shoes4.png',
+    'assets/images/image_shoes5.png',
+    'assets/images/image_shoes6.png',
+    'assets/images/image_shoes7.png',
+    'assets/images/image_shoes8.png',
   ];
 
   @override
   Widget build(BuildContext context) {
+    WishlistProvider wishlistProvider = Provider.of<WishlistProvider>(context);
+    CartProvider cartProvider = Provider.of<CartProvider>(context);
     Future<void> showSuccessMsg() async {
       return showDialog(
           context: context,
@@ -87,7 +87,9 @@ class _PopularProductPageState extends State<PopularProductPage> {
                                         borderRadius:
                                             BorderRadius.circular(12)),
                                     backgroundColor: primaryColor),
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.pushNamed(context, '/cart');
+                                },
                                 child: Text(
                                   'View my Cart',
                                   style: primaryTextStyle.copyWith(
@@ -125,6 +127,7 @@ class _PopularProductPageState extends State<PopularProductPage> {
                 height: 54,
                 child: TextButton(
                   onPressed: () {
+                    cartProvider.addToCart(widget.product);
                     showSuccessMsg();
                   },
                   style: TextButton.styleFrom(
@@ -165,9 +168,9 @@ class _PopularProductPageState extends State<PopularProductPage> {
             width: double.maxFinite,
             height: 310,
             child: CarouselSlider(
-                items: images
-                    .map((e) => Image.asset(
-                          e,
+                items: widget.product.galleries!
+                    .map((image) => Image.network(
+                          image.url!,
                           width: MediaQuery.of(context).size.width,
                           height: 310,
                           fit: BoxFit.cover,
@@ -185,7 +188,7 @@ class _PopularProductPageState extends State<PopularProductPage> {
           ),
           Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: images.map((e) {
+              children: widget.product.galleries!.map((e) {
                 // int indexSui = images.indexOf(e);
                 // print(indexSui);
                 index++;
@@ -233,12 +236,13 @@ class _PopularProductPageState extends State<PopularProductPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'TERREX JUMBALANG',
+                          widget.product.name!,
                           style: primaryTextStyle.copyWith(
                               fontSize: 18, fontWeight: semiBold),
+                          maxLines: 1,
                         ),
                         Text(
-                          'Hiking',
+                          widget.product.category!.name!,
                           style: subtitleTextStyle.copyWith(fontSize: 12),
                         )
                       ],
@@ -246,10 +250,9 @@ class _PopularProductPageState extends State<PopularProductPage> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      setState(() {
-                        isWishList = !isWishList;
-                      });
-                      if (isWishList) {
+                      wishlistProvider.setProduct(widget.product);
+                      // print(wishlistProvider.setProduct(widget.product));
+                      if (wishlistProvider.isWishlist(widget.product)) {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                             backgroundColor: secondaryColor,
                             content: Text(
@@ -266,7 +269,7 @@ class _PopularProductPageState extends State<PopularProductPage> {
                       }
                     },
                     child: Image.asset(
-                      isWishList
+                      wishlistProvider.isWishlist(widget.product)
                           ? 'assets/images/button_wishlist_blue.png'
                           : 'assets/images/button_wishlist.png',
                       width: 46,
@@ -290,7 +293,7 @@ class _PopularProductPageState extends State<PopularProductPage> {
                     style: primaryTextStyle,
                   ),
                   Text(
-                    'Harga',
+                    '\$ ${widget.product.price}',
                     style: priceTextStyle.copyWith(
                         fontSize: 15, fontWeight: semiBold),
                   )
@@ -316,7 +319,7 @@ class _PopularProductPageState extends State<PopularProductPage> {
                     height: 12,
                   ),
                   Text(
-                    'JEMBALNG JEMBALNG JEMBALNG JEMBALNG JEMBALNG JEMBALNG JEMBALNG JEMBALNG JEMBALNG JEMBALNG JEMBALNG JEMBALNG',
+                    widget.product.description!,
                     style: subtitleTextStyle.copyWith(fontWeight: light),
                   )
                 ],
