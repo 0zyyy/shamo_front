@@ -1,17 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:shamo_front/models/category_model.dart';
+import 'package:shamo_front/models/product_model.dart';
+import 'package:shamo_front/pages/popular_product_page.dart';
+import 'package:shamo_front/pages/product_pages.dart';
 import 'package:shamo_front/pages/theme.dart';
-import 'package:shamo_front/utils/big_text.dart';
-import 'package:shamo_front/utils/colors.dart';
-import 'package:shamo_front/utils/small_text.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard({Key? key}) : super(key: key);
+  final Product product;
+  const ProductCard({
+    required this.product,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/product');
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PopularProductPage(product: product),
+            ));
       },
       child: Container(
           width: 215,
@@ -27,34 +36,35 @@ class ProductCard extends StatelessWidget {
                 height: 30,
               ),
               Image(
-                image: AssetImage('assets/images/image_shoes.png'),
+                image: NetworkImage(product.galleries![0].url!),
                 fit: BoxFit.cover,
                 height: 150,
                 width: 215,
               ),
               Container(
-                margin: EdgeInsets.only(left: 20),
+                margin: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Hiking',
+                      product.category!.name.toString(),
                       style: secondaryTextStyle,
                     ),
                     SizedBox(height: 6),
                     Text(
-                      'COURT VISION 2.0',
+                      product.name!,
                       style: primaryTextStyle.copyWith(
                           fontSize: 18,
                           color: blackColor,
                           fontWeight: semiBold),
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                     SizedBox(
                       height: 6,
                     ),
                     Text(
-                      '\$ 58.67',
+                      '\$ ${product.price.toString()}',
                       style: priceTextStyle,
                     )
                   ],
